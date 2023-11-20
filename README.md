@@ -7,7 +7,7 @@ A worker queue implementation for Postgres.
 
 ### Install `pgwq` into a new DB
 ```bash
-echo 'CREATE DATABASE pgwq' | psql -U pgwq -h localhost pgwq
+echo 'CREATE DATABASE pgwq' | psql -U pgwq -h localhost postgres
 cat *.sql | psql -U pgwq -h localhost pgwq
 ```
 
