@@ -3,9 +3,11 @@
 A worker queue implementation for Postgres.
 ## Usage
 
+
+
 ### Install `pgwq` into a new DB
 ```bash
-echo 'CREATE DATABASE IF NOT EXISTS pgwq' | psql -U pgwq -h localhos pgwq
+echo 'CREATE DATABASE IF NOT EXISTS pgwq' | psql -U pgwq -h localhost pgwq
 cat *.sql | psql -U pgwq -h localhost pgwq
 ```
 
@@ -62,3 +64,7 @@ SELECT * FROM wq_fetch(true);
 SELECT * FROM wq_list_running() ORDER BY started_at;
 
 ```
+
+## TODO:
+ - Installing PG via `docker-compose`.
+ - Document the purpose of pgwq, use cases and limitations.
