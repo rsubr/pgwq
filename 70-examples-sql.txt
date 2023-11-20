@@ -1,0 +1,51 @@
+-- Run this as pgwq (admin)
+-- psql -U pgwq -h localhost pgwq < 70-examples-sql.txt
+
+-- create some workers
+CREATE USER w1 WITH PASSWORD 'w1';
+CREATE USER w2 WITH PASSWORD 'w2';
+CREATE USER x1 WITH PASSWORD 'x1';
+CREATE USER x2 WITH PASSWORD 'x2';
+
+-- Add some queues and assign members
+
+SELECT * FROM wq_add_queue_worker('q1', 'w1');
+SELECT * FROM wq_add_queue_worker('q1', 'w2');
+SELECT * FROM wq_add_queue_worker('q2', 'x1');
+SELECT * FROM wq_add_queue_worker('q2', 'x2');
+
+
+-- Add some jobs to the queue
+SELECT * FROM wq_add_job('q1', 'Download Google', 'https://www.google.com');
+SELECT * FROM wq_add_job('q1', 'Download MSN',    'https://www.microsoft.com');
+
+SELECT * FROM wq_add_job('q2', 'Validate Google', 'https://www.google.com');
+SELECT * FROM wq_add_job('q3', 'Validate MSN',    'https://www.microsoft.com');
+
+
+-- TEST
+SET role = 'w1';
+-- Fetch the oldest job from the queue and complete
+SELECT * FROM wq_fetch();
+SELECT * FROM wq_list_running() ORDER BY started_at;
+SELECT * FROM wq_completed(1, 0, 'Download success!');
+SELECT * FROM wq_list_running() ORDER BY started_at;
+
+-- TEST 2
+SET role = 'x1';
+SELECT * FROM wq_fetch(true);
+
+
+-- TEST 3
+SET role = 'pgwq';
+SELECT * FROM wq_list_running() ORDER BY started_at;
+
+
+-- Clean up
+DROP USER w1;
+DROP USER w2;
+DROP USER x1;
+DROP USER x2;
+
+TRUNCATE TABLE queue_members RESTART IDENTITY CASCADE;
+TRUNCATE TABLE jobs          RESTART IDENTITY CASCADE;
