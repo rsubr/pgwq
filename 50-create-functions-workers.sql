@@ -1,9 +1,9 @@
 CREATE OR REPLACE FUNCTION wq_fetch (
   p_latest BOOL DEFAULT FALSE 
 ) RETURNS TABLE (
-  id     BIGINT,
-  label  CITEXT,
-  params CITEXT
+  id     jobs.id%TYPE,
+  name   jobs.name%TYPE,
+  params jobs.params%TYPE
 ) AS
 $$
 DECLARE
@@ -44,9 +44,9 @@ COMMENT ON FUNCTION wq_fetch(BOOL) IS
 
 
 CREATE OR REPLACE FUNCTION wq_completed (
-  p_id          BIGINT,
-  p_exit_status INT,
-  p_output      CITEXT
+  p_id          jobs.id%TYPE,
+  p_exit_status jobs.exit_status%TYPE,
+  p_output      jobs.output%TYPE
 ) RETURNS BIGINT AS
 $$
 BEGIN

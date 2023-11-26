@@ -1,10 +1,10 @@
 CREATE OR REPLACE FUNCTION wq_add_queue_worker (
-    p_queue  CITEXT,
-    p_worker CITEXT
+    p_queue  queue_members.queue%TYPE,
+    p_worker queue_members.worker%TYPE
 ) RETURNS BIGINT AS
 $$
 DECLARE
-    new_id BIGINT;
+    new_id queue_members.id%TYPE;
 BEGIN
     INSERT INTO queue_members (queue, worker)
     VALUES (p_queue, p_worker)
@@ -22,13 +22,13 @@ COMMENT ON FUNCTION wq_add_queue_worker(CITEXT, CITEXT) IS
 
 
 CREATE OR REPLACE FUNCTION wq_add_job (
-    p_queue  CITEXT,
-    p_name   CITEXT,
-    p_params CITEXT
+    p_queue  jobs.queue_name%TYPE,
+    p_worker jobs.worker%TYPE,
+    p_params jobs.params%TYPE
 ) RETURNS BIGINT AS
 $$
 DECLARE
-    new_id BIGINT;
+    new_id jobs.id%TYPE;
 BEGIN
     INSERT INTO jobs (queue_name, name, params)
     VALUES (p_queue, p_name, p_params)
